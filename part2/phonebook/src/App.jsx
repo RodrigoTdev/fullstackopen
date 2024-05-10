@@ -3,7 +3,7 @@ import { Persons } from './components/Persons'
 import { PersonForm } from './components/PersonForm'
 import { Filter } from './components/Filter'
 import { useEffect } from 'react'
-import axios from 'axios'
+import noteService from './services/notes'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,10 +12,7 @@ const App = () => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then((response) => {
-      setPersons(response.data)
-      console.log('response.data:', response.data)
-    })
+    noteService.getAll().then((data) => setPersons(data))
   }, [])
 
   const filteredPersons = persons.filter((person) =>
@@ -24,11 +21,46 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!persons.some((person) => person.name === newName)) {
-      setPersons((prev) => prev.concat({ name: newName, number: newNumber }))
+    if (newName.length === 0 || newNumber.length === 0) {
+      alert('Missing data')
+    } else if (!persons.some((person) => person.name === newName)) {
+      noteService
+        .addPerson({
+          name: newName,
+          number: newNumber,
+          id: `${persons.length + 1}`,
+        })
+        .then((data) => setPersons(persons.concat(data)))
     } else {
-      alert(`${newName} is already added to phonebook`)
+      if (
+        window.confirm(
+          `${newName} already in contacts, do you want to change the number to ${newNumber}?`
+        )
+      ) {
+        const person = persons.find((person) => person.name == newName)
+        const newPerson = { ...person, number: newNumber }
+        noteService.editPerson(newPerson)
+
+        const newPersons = persons.map((person) => {
+          if (person.name == newPerson.name) {
+            return newPerson
+          } else {
+            return person
+          }
+        })
+
+        setPersons(newPersons)
+      }
     }
+  }
+
+  const handleDelete = (person) => {
+    if (window.confirm(`Are you sure yo want to delete ${person.name} ?`))
+      noteService
+        .deletePerson(person.id)
+        .then((data) =>
+          setPersons(persons.filter((person) => person.id !== data.id))
+        )
   }
 
   return (
@@ -42,7 +74,10 @@ const App = () => {
         setNewNumber={setNewNumber}
       />
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons} />
+      <Persons
+        persons={filteredPersons}
+        handleDelete={handleDelete}
+      />
     </div>
   )
 }
