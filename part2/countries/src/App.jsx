@@ -5,11 +5,8 @@ import { useEffect } from 'react'
 import { Countries } from './components/Countries'
 
 function App() {
-  const [country, setCountry] = useState('')
   const [resultCountries, setResultCountries] = useState([])
   const [countriesList, setCountriesList] = useState([])
-
-  // const countriesNames = countriesList?.map((country) => country.name.common)
 
   useEffect(() => {
     axios
@@ -38,7 +35,10 @@ function App() {
           type='text'
           onChange={handleChange}
         />
-        <Countries resultCountries={resultCountries} />
+        <Countries
+          resultCountries={resultCountries}
+          setResultCountries={setResultCountries}
+        />
       </div>
     </>
   )
