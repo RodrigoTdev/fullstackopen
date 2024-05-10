@@ -1,0 +1,17 @@
+
+
+### DELETE A PERSON
+DELETE http://localhost:3001/api/persons/2
+
+### ADD A NEW PERSON
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "id": 5,
+    "name": "Eddie Vedder",
+    "number": "040-123456"
+}
+
+
+
