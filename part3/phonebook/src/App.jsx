@@ -36,10 +36,12 @@ const App = () => {
           id: `${persons.length + 1}`,
         })
         .then((data) => {
-          setPersons(persons.concat(data))
+          setPersons(data)
           setNotification({ type: 'success', message: `Added ${newName}` })
           setTimeout(() => {
             setNotification(null)
+            setNewName('')
+            setNewNumber('')
           }, 2000)
         })
     } else {
@@ -82,13 +84,14 @@ const App = () => {
   }
 
   const handleDelete = (person) => {
+    console.log(person)
     if (window.confirm(`Are you sure yo want to delete ${person.name} ?`))
       noteService.deletePerson(person.id).then((data) => {
-        setPersons(persons.filter((person) => person.id !== data.id))
         setNotification({
           type: 'warning',
-          message: `${newName} was deleted`,
+          message: `${person.name} was deleted`,
         })
+        // setPersons(data) Arreglar aca
         setTimeout(() => {
           setNotification(null)
         }, 2000)
@@ -105,6 +108,7 @@ const App = () => {
         handleSubmit={handleSubmit}
         setNewName={setNewName}
         setNewNumber={setNewNumber}
+        length={persons.length}
       />
       <h3>Numbers</h3>
       <Persons

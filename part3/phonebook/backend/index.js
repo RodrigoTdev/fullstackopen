@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
-const port = 3001
+const cors = require('cors')
+const morgan = require('morgan')
 
 let db = [
   {
@@ -24,6 +25,28 @@ let db = [
     number: '39-23-6423122',
   },
 ]
+app.use(express.json())
+app.use(cors())
+
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms :body ')
+)
+
+morgan.token('body', (request, response) => {
+  if (request.method === 'POST') {
+    return JSON.stringify(request.body)
+  } else {
+    return ''
+  }
+})
+
+app.get('/', (request, response) => {
+  response.send('<h1>Hello World!</h1>')
+})
+
+app.get('/api/notes', (request, response) => {
+  response.json(notes)
+})
 
 app.get('/api/persons', (req, res) => {
   res.json(db)
@@ -37,17 +60,29 @@ app.get('/info', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
-  db = db.filter((person) => person.id !== id)
-  res.status(204).end()
+  res.status(204).json(db.filter((person) => person.id !== id))
 })
 
 app.post('/api/persons', (req, res) => {
-  const newPerson = req.body
-  //   Arreglar undefined aca
-  console.log(JSON.stringify(newPerson))
-  res.status(201).json(db)
+  const { id, name, number } = req.body
+
+  const newPerson = {
+    id: Number(id),
+    name,
+    number,
+  }
+  //  Por ahora funciona pero no se guarda realmente
+  if (!newPerson.name || !newPerson.number) {
+    return res.status(400).json({ error: 'name or number missing' })
+  }
+  if (db.some((person) => person.name === newPerson.name)) {
+    return res.status(400).json({ error: 'name must be unique' })
+  }
+  const newDb = db.concat(newPerson)
+  res.status(201).json(newDb)
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}`)
 })
