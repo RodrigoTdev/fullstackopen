@@ -1,17 +1,14 @@
 import React from 'react'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
-export const PersonForm = ({
-  handleSubmit,
-  setNewName,
-  setNewNumber,
-  length,
-}) => {
+export const PersonForm = ({ handleSubmit, setNewName, setNewNumber }) => {
   return (
     <div>
       {' '}
       <form onSubmit={handleSubmit}>
         {' '}
-        <div key={length + 111}>
+        <div>
           name: <input onChange={(e) => setNewName(e.target.value)} />{' '}
           <div>
             number: <input onChange={(e) => setNewNumber(e.target.value)} />{' '}

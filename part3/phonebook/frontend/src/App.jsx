@@ -78,20 +78,21 @@ const App = () => {
         })
         setTimeout(() => {
           setNotification(null)
+          window.location.reload()
         }, 2000)
       }
     }
   }
 
   const handleDelete = (person) => {
-    console.log(person)
     if (window.confirm(`Are you sure yo want to delete ${person.name} ?`))
-      noteService.deletePerson(person.id).then((data) => {
+      noteService.deletePerson(person.id).then(() => {
         setNotification({
           type: 'warning',
           message: `${person.name} was deleted`,
         })
-        // setPersons(data) Arreglar aca
+
+        setPersons(persons.filter((item) => item.id !== person.id))
         setTimeout(() => {
           setNotification(null)
         }, 2000)
@@ -108,7 +109,7 @@ const App = () => {
         handleSubmit={handleSubmit}
         setNewName={setNewName}
         setNewNumber={setNewNumber}
-        length={persons.length}
+        persons={persons}
       />
       <h3>Numbers</h3>
       <Persons

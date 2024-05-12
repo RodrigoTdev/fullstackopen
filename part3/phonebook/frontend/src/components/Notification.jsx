@@ -33,7 +33,6 @@ export const Notification = ({ notification }) => {
           : notificationStyle.warning
       }
     >
-      {console.log(type)}
       {message}
     </div>
   )

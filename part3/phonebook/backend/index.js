@@ -44,10 +44,6 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/notes', (request, response) => {
-  response.json(notes)
-})
-
 app.get('/api/persons', (req, res) => {
   res.json(db)
 })
@@ -56,11 +52,6 @@ app.get('/info', (req, res) => {
   res.send(
     `<p>Phonebook has info for ${db.length} people</p><p>${new Date()}</p>`
   )
-})
-
-app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  res.status(204).json(db.filter((person) => person.id !== id))
 })
 
 app.post('/api/persons', (req, res) => {
@@ -78,8 +69,28 @@ app.post('/api/persons', (req, res) => {
   if (db.some((person) => person.name === newPerson.name)) {
     return res.status(400).json({ error: 'name must be unique' })
   }
-  const newDb = db.concat(newPerson)
-  res.status(201).json(newDb)
+  // const newDb = db.concat(newPerson)
+  db.push(newPerson)
+  res.status(201).json(db)
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id)
+  db = db.filter((item) => item.id !== id)
+  res.status(204).end()
+})
+
+app.put('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id)
+  const person = req.body
+  db = db.map((item) => {
+    if (item.id === id) {
+      return person
+    } else {
+      return item
+    }
+  })
+  res.status(201)
 })
 
 const PORT = process.env.PORT || 3001
