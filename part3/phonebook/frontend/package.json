@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../frontend && npm run build && @powershell Copy-Item dist -Recurse ../backend",
+    "build:ui": "@powershell Remove-Item -Recurse -Force public && cd ../frontend && npm run build && @powershell Copy-Item public -Recurse ../backend",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "push": "cd.. && git add . && git status && git commit -m MinorChanges && git push -u origin main",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
