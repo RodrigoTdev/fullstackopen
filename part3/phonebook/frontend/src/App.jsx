@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [notification, setNotification] = useState(null)
+  const [clearInputs, setClearInputs] = useState(false)
 
   useEffect(() => {
     noteService.getAll().then((data) => setPersons(data))
@@ -37,11 +38,12 @@ const App = () => {
         })
         .then((data) => {
           setPersons(data)
+          setNewName('')
+          setNewNumber('')
+          setClearInputs(!clearInputs)
           setNotification({ type: 'success', message: `Added ${newName}` })
           setTimeout(() => {
             setNotification(null)
-            setNewName('')
-            setNewNumber('')
           }, 2000)
         })
     } else {
@@ -59,7 +61,7 @@ const App = () => {
             message: `${newName} already deleted from contacts`,
           })
           setTimeout(() => {
-            window.location.reload()
+            // window.location.reload()
           }, 3000)
         })
 
@@ -72,13 +74,14 @@ const App = () => {
         })
 
         setPersons(newPersons)
+        setClearInputs(!clearInputs)
         setNotification({
           type: 'success',
           message: `${newName} number changed`,
         })
         setTimeout(() => {
           setNotification(null)
-          window.location.reload()
+          // window.location.reload()
         }, 2000)
       }
     }
@@ -109,7 +112,7 @@ const App = () => {
         handleSubmit={handleSubmit}
         setNewName={setNewName}
         setNewNumber={setNewNumber}
-        persons={persons}
+        clearInputs={clearInputs}
       />
       <h3>Numbers</h3>
       <Persons
