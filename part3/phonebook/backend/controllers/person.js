@@ -72,7 +72,10 @@ router.delete('/persons/:id', async (req, res, next) => {
 
 router.put('/persons/:id', async (req, res, next) => {
   try {
-    await PersonModel.findByIdAndUpdate(req.params.id, req.body)
+    await PersonModel.findByIdAndUpdate(req.params.id, req.body, {
+      runValidators: true,
+      new: true,
+    })
 
     res.status(201)
   } catch (error) {

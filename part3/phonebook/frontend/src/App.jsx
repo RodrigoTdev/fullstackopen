@@ -66,11 +66,10 @@ const App = () => {
           console.log(error)
           setNotification({
             type: 'warning',
-            message: `${newName} already deleted from contacts`,
+            // message: `${newName} already deleted from contacts`,
+            message: `${error.response.data.slice(158, 223)}`,
           })
-          setTimeout(() => {
-            // window.location.reload()
-          }, 3000)
+          setTimeout(() => {}, 3000)
         })
 
         const newPersons = persons.map((person) => {
@@ -81,7 +80,9 @@ const App = () => {
           }
         })
 
-        setPersons(newPersons)
+        if (notification && notification.type != 'warning') {
+          setPersons(newPersons)
+        }
         setClearInputs(!clearInputs)
         setNotification({
           type: 'success',
@@ -89,7 +90,6 @@ const App = () => {
         })
         setTimeout(() => {
           setNotification(null)
-          // window.location.reload()
         }, 2000)
       }
     }
