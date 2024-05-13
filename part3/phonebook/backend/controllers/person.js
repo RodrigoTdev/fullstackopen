@@ -42,7 +42,7 @@ router.get('/info', async (req, res, next) => {
   }
 })
 
-router.post('/persons', async (req, res) => {
+router.post('/persons', async (req, res, next) => {
   const { name, number } = req.body
 
   try {
@@ -61,7 +61,7 @@ router.post('/persons', async (req, res) => {
   }
 })
 
-router.delete('/persons/:id', async (req, res) => {
+router.delete('/persons/:id', async (req, res, next) => {
   try {
     await PersonModel.findByIdAndDelete(req.params.id)
     res.status(204).end()
@@ -70,7 +70,7 @@ router.delete('/persons/:id', async (req, res) => {
   }
 })
 
-router.put('/persons/:id', async (req, res) => {
+router.put('/persons/:id', async (req, res, next) => {
   try {
     await PersonModel.findByIdAndUpdate(req.params.id, req.body)
 

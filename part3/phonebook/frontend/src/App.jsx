@@ -45,6 +45,15 @@ const App = () => {
             setNotification(null)
           }, 2000)
         })
+        .catch((error) => {
+          setNotification({
+            type: 'warning',
+            message: `${error.response.data.slice(158, 223)}`,
+          })
+          setTimeout(() => {
+            setNotification(null)
+          }, 2000)
+        })
     } else {
       if (
         window.confirm(
