@@ -1,4 +1,4 @@
-# FULLSTACKOPEN Part1
+# FULLSTACKOPEN
 
 ## TODO:
 - [✅]PART 1
