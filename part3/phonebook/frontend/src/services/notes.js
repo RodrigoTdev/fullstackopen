@@ -7,6 +7,11 @@ const getAll = () => {
   return request.then((response) => response.data)
 }
 
+const getById = (id) => {
+  const request = axios.get(`${url}/${id}`)
+  return request.then((response) => response.data)
+}
+
 const addPerson = (object) => {
   const request = axios.post(url, object)
   return request.then((response) => response.data)
@@ -27,4 +32,5 @@ export default {
   addPerson,
   deletePerson,
   editPerson,
+  getById,
 }

@@ -34,10 +34,9 @@ const App = () => {
         .addPerson({
           name: newName,
           number: newNumber,
-          id: `${persons.length + 1}`,
         })
         .then((data) => {
-          setPersons(data)
+          setPersons(persons.concat(data))
           setNewName('')
           setNewNumber('')
           setClearInputs(!clearInputs)
