@@ -1,0 +1,14 @@
+### GET ALL
+GET http://localhost:3001/api/blogs
+
+
+### POST A NEW BLOG
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "author": "Rodrigo",
+    "title": "Express",
+    "url": "https://expressjs.com/",
+    "likes": 200
+}
