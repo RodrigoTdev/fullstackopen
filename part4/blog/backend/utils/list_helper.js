@@ -12,7 +12,17 @@ const totalLikes = (blogs) => {
   }, 0)
 }
 
+const mostLikes = (blogs) => {
+  return blogs.reduce((acc, valActual) => {
+    if (acc.likes < valActual.likes) {
+      acc = valActual
+    }
+    return acc
+  }, blogs[0])
+}
+
 module.exports = {
   dummy,
   totalLikes,
+  mostLikes,
 }
