@@ -6,7 +6,7 @@ const route = express.Router()
 route.get('/', (request, response) => {
   try {
     Blog.find({}).then((blogs) => {
-      response.json(blogs)
+      response.status(200).json(blogs)
     })
   } catch (error) {
     console.log(error)

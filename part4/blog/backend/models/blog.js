@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { MONGODB_URI } = require('../utils/config')
 
 const blogSchema = new mongoose.Schema({
   title: String,
@@ -8,7 +9,7 @@ const blogSchema = new mongoose.Schema({
 })
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(MONGODB_URI)
   .then(() => {
     console.log('connected to MongoDB')
   })
