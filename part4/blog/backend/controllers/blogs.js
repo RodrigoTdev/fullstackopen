@@ -3,22 +3,46 @@ const app = express()
 const Blog = require('../models/blog')
 const route = express.Router()
 
-route.get('/', (request, response) => {
+route.get('/', async (request, response) => {
   try {
-    Blog.find({}).then((blogs) => {
-      response.status(200).json(blogs)
-    })
+    const blogs = await Blog.find({})
+
+    response.status(200).json(blogs)
   } catch (error) {
     console.log(error)
   }
 })
 
-route.post('/', (request, response) => {
-  const blog = new Blog(request.body)
+route.post('/', async (request, response) => {
+  const blog = await new Blog(request.body)
   try {
-    blog.save().then((result) => {
-      response.status(201).json(result)
-    })
+    if (!blog.title || !blog.url) {
+      return response.status(400).json({ error: 'title and url are required' })
+    }
+    await blog.save()
+    const blogs = await Blog.find({})
+    response.status(201).json(blogs)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+route.delete('/:id', async (request, response) => {
+  const _id = request.params.id
+  try {
+    await Blog.findByIdAndDelete(_id)
+    response.status(204)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+route.put('/:id', async (request, response) => {
+  const _id = request.params.id
+  const blog = request.body
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(_id, blog)
+    response.status(200).json(updatedBlog)
   } catch (error) {
     console.log(error)
   }

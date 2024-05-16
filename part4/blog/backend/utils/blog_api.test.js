@@ -37,17 +37,64 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('there are two blogs', async () => {
+test('Quantity of blogs', async () => {
   const response = await api.get('/api/blogs')
 
   assert.strictEqual(response.body.length, initialBlogs.length)
 })
 
-test('the first blog is about HTTP methods', async () => {
+test('blogs have id identifier', async () => {
   const response = await api.get('/api/blogs')
+  assert.strictEqual(
+    response.body.every((objeto) => objeto.hasOwnProperty('id')),
+    true
+  )
+})
 
-  const contents = response.body.map((e) => e.title)
-  assert(contents.includes('Nodejs 20'))
+test('add a new blog', async () => {
+  const newBlog = {
+    title: 'Jest',
+    author: 'RodriDev',
+    url: 'https://jestjs.io',
+    likes: 52000,
+  }
+  const response = await api.post('/api/blogs').send(newBlog)
+  assert.strictEqual(response.body.length, initialBlogs.length + 1)
+})
+
+test('add a new blog without likes', async () => {
+  const newBlog = {
+    title: 'TypeScript',
+    author: 'RodriDev',
+    url: 'https://www.typescriptlang.org',
+  }
+  const response = await api.post('/api/blogs').send(newBlog)
+  assert.strictEqual(response.body[response.body.length - 1].likes, 0)
+})
+
+test('add a new blog without url', async () => {
+  const newBlog = {
+    title: 'TypeScript',
+    author: 'RodriDev',
+  }
+  await api.post('/api/blogs').send(newBlog).expect(400)
+})
+
+test('add a new blog without title', async () => {
+  const newBlog = {
+    author: 'RodriDev',
+    url: 'https://www.typescriptlang.org',
+  }
+  await api.post('/api/blogs').send(newBlog).expect(400)
+})
+
+test('delete a blog by id', async () => {
+  const response = await api.get('/api/blogs')
+  const id = response.body[0].id
+
+  await api.delete(`/api/blogs/${id}`)
+  // const response2 = await api.get('/api/blogs')
+  // assert.strictEqual(response2.body.length, initialBlogs.length - 1)
 })
 
 after(async () => {

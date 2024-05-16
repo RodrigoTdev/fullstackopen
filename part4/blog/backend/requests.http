@@ -12,3 +12,19 @@ Content-Type: application/json
     "url": "https://expressjs.com/",
     "likes": 200
 }
+
+
+### DELETE A BLOG
+DELETE http://localhost:3001/api/blogs/6646906be1f3e3afe2758889
+
+
+### CHANGE A BLOG
+PUT http://localhost:3001/api/blogs/6646906be1f3e3afe2758889
+Content-Type: application/json
+
+{
+    "author": "Rodrigo",
+    "title": "Express",
+    "url": "https://expressjs.com/",
+    "likes": 500
+}
