@@ -1,9 +1,9 @@
 const express = require('express')
 const app = express()
 const Blog = require('../models/blog')
-const route = express.Router()
+const blogsRouter = express.Router()
 
-route.get('/', async (request, response) => {
+blogsRouter.get('/', async (request, response) => {
   try {
     const blogs = await Blog.find({})
 
@@ -13,7 +13,7 @@ route.get('/', async (request, response) => {
   }
 })
 
-route.post('/', async (request, response) => {
+blogsRouter.post('/', async (request, response) => {
   const blog = await new Blog(request.body)
   try {
     if (!blog.title || !blog.url) {
@@ -27,7 +27,7 @@ route.post('/', async (request, response) => {
   }
 })
 
-route.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', async (request, response) => {
   const _id = request.params.id
   try {
     const result = await Blog.findByIdAndDelete(_id)
@@ -37,7 +37,7 @@ route.delete('/:id', async (request, response) => {
   }
 })
 
-route.put('/:id', async (request, response) => {
+blogsRouter.put('/:id', async (request, response) => {
   const _id = request.params.id
   const blog = request.body
   try {
@@ -48,4 +48,4 @@ route.put('/:id', async (request, response) => {
   }
 })
 
-module.exports = route
+module.exports = blogsRouter

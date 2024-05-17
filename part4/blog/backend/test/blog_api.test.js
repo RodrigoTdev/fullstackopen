@@ -1,32 +1,18 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const app = require('../index.js')
+const app = require('../app.js')
 const Blog = require('../models/blog.js')
+const helpers = require('./test_helpers')
 
 const api = supertest(app)
 
-const initialBlogs = [
-  {
-    title: 'Nodejs 19',
-    author: 'RodriDev',
-    url: 'https://nodejs.org/en/',
-    likes: 19,
-  },
-  {
-    title: 'Nodejs 20',
-    author: 'RodriDev',
-    url: 'https://nodejs.org/en/',
-    likes: 20,
-  },
-]
-
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(initialBlogs[0])
+  let blogObject = new Blog(helpers.initialBlogs[0])
   await blogObject.save()
-  blogObject = new Blog(initialBlogs[1])
+  blogObject = new Blog(helpers.initialBlogs[1])
   await blogObject.save()
 })
 
@@ -40,7 +26,7 @@ test('blogs are returned as json', async () => {
 test('Quantity of blogs', async () => {
   const response = await api.get('/api/blogs')
 
-  assert.strictEqual(response.body.length, initialBlogs.length)
+  assert.strictEqual(response.body.length, helpers.initialBlogs.length)
 })
 
 test('blogs have id identifier', async () => {
@@ -59,7 +45,7 @@ test('add a new blog', async () => {
     likes: 52000,
   }
   const response = await api.post('/api/blogs').send(newBlog)
-  assert.strictEqual(response.body.length, initialBlogs.length + 1)
+  assert.strictEqual(response.body.length, helpers.initialBlogs.length + 1)
 })
 
 test('add a new blog without likes', async () => {
@@ -94,7 +80,7 @@ test('delete a blog by id', async () => {
 
   await api.delete(`/api/blogs/${id}`)
   const response2 = await api.get('/api/blogs')
-  assert.strictEqual(response2.body.length, initialBlogs.length - 1)
+  assert.strictEqual(response2.body.length, helpers.initialBlogs.length - 1)
 })
 
 test('update a blog', async () => {
