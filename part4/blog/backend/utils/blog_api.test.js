@@ -12,13 +12,13 @@ const initialBlogs = [
     title: 'Nodejs 19',
     author: 'RodriDev',
     url: 'https://nodejs.org/en/',
-    likes: 8,
+    likes: 19,
   },
   {
     title: 'Nodejs 20',
     author: 'RodriDev',
     url: 'https://nodejs.org/en/',
-    likes: 6,
+    likes: 20,
   },
 ]
 
@@ -90,11 +90,25 @@ test('add a new blog without title', async () => {
 
 test('delete a blog by id', async () => {
   const response = await api.get('/api/blogs')
-  const id = response.body[0].id
+  const id = response.body[1].id
 
   await api.delete(`/api/blogs/${id}`)
-  // const response2 = await api.get('/api/blogs')
-  // assert.strictEqual(response2.body.length, initialBlogs.length - 1)
+  const response2 = await api.get('/api/blogs')
+  assert.strictEqual(response2.body.length, initialBlogs.length - 1)
+})
+
+test('update a blog', async () => {
+  const response = await api.get('/api/blogs')
+  const id = response.body[0].id
+  const blog = {
+    title: 'Nodejs 19',
+    author: 'RodriDev',
+    url: 'https://nodejs.org/en/',
+    likes: 150,
+  }
+  await api.put(`/api/blogs/${id}`).send(blog)
+  const response2 = await api.get('/api/blogs')
+  assert.strictEqual(response2.body[0].likes, 150)
 })
 
 after(async () => {

@@ -30,8 +30,8 @@ route.post('/', async (request, response) => {
 route.delete('/:id', async (request, response) => {
   const _id = request.params.id
   try {
-    await Blog.findByIdAndDelete(_id)
-    response.status(204)
+    const result = await Blog.findByIdAndDelete(_id)
+    response.status(204).json(result)
   } catch (error) {
     console.log(error)
   }
