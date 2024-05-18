@@ -7,10 +7,11 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-    "author": "Rodrigo",
-    "title": "Express",
-    "url": "https://expressjs.com/",
-    "likes": 200
+    "author": "Root",
+    "title": "Tailwind CSS",
+    "url": "https://tailwindcss.com/",
+    "likes": 525,
+    "userId": "664934037e8f752a040e822f"
 }
 
 
@@ -23,8 +24,20 @@ PUT http://localhost:3001/api/blogs/6646906be1f3e3afe2758889
 Content-Type: application/json
 
 {
-    "author": "Rodrigo",
+    "author": "Root",
     "title": "Express",
     "url": "https://expressjs.com/",
-    "likes": 500
+    "likes": 500,
+    "userid": "664934037e8f752a040e822f"
+}
+
+
+### CREATE A USER
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "root",
+    "name": "Root",
+    "password": "1988"
 }

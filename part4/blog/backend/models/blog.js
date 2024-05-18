@@ -6,6 +6,11 @@ const blogSchema = new mongoose.Schema({
   author: String,
   url: String,
   likes: { type: Number, default: 0 },
+  user: {
+    // matriz de ids de mongo
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 })
 
 blogSchema.set('toJSON', {
@@ -15,15 +20,6 @@ blogSchema.set('toJSON', {
     delete returnedObject.__v
   },
 })
-
-mongoose
-  .connect(MONGODB_URI)
-  .then(() => {
-    console.log('connected to MongoDB')
-  })
-  .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
 
 const Blog = mongoose.model('Blog', blogSchema, 'blogs')
 
