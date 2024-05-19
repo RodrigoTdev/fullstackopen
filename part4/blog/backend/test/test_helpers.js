@@ -6,13 +6,13 @@ const initialBlogs = [
     title: 'Nodejs 19',
     author: 'RodriDev',
     url: 'https://nodejs.org/en/',
-    likes: 19,
+    likes: 191,
   },
   {
     title: 'Nodejs 20',
     author: 'RodriDev',
     url: 'https://nodejs.org/en/',
-    likes: 20,
+    likes: 201,
   },
 ]
 const nonExistingId = async () => {

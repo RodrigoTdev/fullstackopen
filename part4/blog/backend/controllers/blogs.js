@@ -30,8 +30,8 @@ blogsRouter.post('/', async (request, response) => {
       return response.status(400).json({ error: 'title and url are required' })
     }
     const savedBlog = await blog.save()
-    user.blogs = user.blogs.concat(savedBlog._id)
-    await user.save()
+    // user.blogs = user.blogs.concat(savedBlog._id)
+    // await user.save()
     response.status(201).json(savedBlog)
   } catch (error) {
     console.log(error)

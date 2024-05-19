@@ -13,9 +13,16 @@ const api = supertest(app)
 describe('blogs', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
-    let blogObject = new Blog(helpers.initialBlogs[0])
+    let blogObject = new Blog({
+      ...helpers.initialBlogs[0],
+      user: '664945dc28a7ef70c158dcc5',
+    })
     await blogObject.save()
-    blogObject = new Blog(helpers.initialBlogs[1])
+    blogObject = new Blog({
+      ...helpers.initialBlogs[1],
+      user: '664945dc28a7ef70c158dcc5',
+    })
+
     await blogObject.save()
   })
 
@@ -39,70 +46,76 @@ describe('blogs', () => {
       true
     )
   })
+})
 
+describe('no reset', () => {
   test('add a new blog', async () => {
     const newBlog = {
       title: 'Jest',
       author: 'RodriDev',
       url: 'https://jestjs.io',
       likes: 52000,
-      userId: '664934037e8f752a040e822f',
+      userId: '664945dc28a7ef70c158dcc5',
     }
-    const response = await api.post('/api/blogs').send(newBlog)
+    await api.post('/api/blogs').send(newBlog)
     const blogs = await Blog.find({})
+
     assert.strictEqual(blogs.length, helpers.initialBlogs.length + 1)
   })
 
-  // test('add a new blog without likes', async () => {
-  //   const newBlog = {
-  //     title: 'TypeScript',
-  //     author: 'RodriDev',
-  //     url: 'https://www.typescriptlang.org',
-  //   }
-  //   const response = await api.post('/api/blogs').send(newBlog)
-  //   assert.strictEqual(response.body[response.body.length - 1].likes, 0)
-  // })
+  test('add a new blog without likes', async () => {
+    const newBlog = {
+      title: 'TypeScript',
+      author: 'RodriDev',
+      url: 'https://www.typescriptlang.org',
+      userId: '664945dc28a7ef70c158dcc5',
+    }
+    const response = await api.post('/api/blogs').send(newBlog)
+    assert.strictEqual(response.body.likes, 0)
+  })
 
-  // test('add a new blog without url', async () => {
-  //   const newBlog = {
-  //     title: 'TypeScript',
-  //     author: 'RodriDev',
-  //   }
-  //   await api.post('/api/blogs').send(newBlog).expect(400)
-  // })
+  test('add a new blog without url', async () => {
+    const newBlog = {
+      title: 'TypeScript',
+      author: 'RodriDev',
+      userId: '664945dc28a7ef70c158dcc5',
+    }
+    await api.post('/api/blogs').send(newBlog).expect(400)
+  })
 
-  // test('add a new blog without title', async () => {
-  //   const newBlog = {
-  //     author: 'RodriDev',
-  //     url: 'https://www.typescriptlang.org',
-  //   }
-  //   await api.post('/api/blogs').send(newBlog).expect(400)
-  // })
+  test('add a new blog without title', async () => {
+    const newBlog = {
+      author: 'RodriDev',
+      url: 'https://www.typescriptlang.org',
+      userId: '664945dc28a7ef70c158dcc5',
+    }
+    await api.post('/api/blogs').send(newBlog).expect(400)
+  })
 
-  // LOS 2 ULTIMOS FUNCIONAN
+  test('delete a blog by id', async () => {
+    const response = await api.get('/api/blogs')
+    const id = response.body[0].id
 
-  // test('delete a blog by id', async () => {
-  //   const response = await api.get('/api/blogs')
-  //   const id = response.body[1].id
+    await api.delete(`/api/blogs/${id}`)
+    const response2 = await api.get('/api/blogs')
+    assert.strictEqual(response2._body.length, helpers.initialBlogs.length + 1)
+  })
 
-  //   await api.delete(`/api/blogs/${id}`)
-  //   const response2 = await api.get('/api/blogs')
-  //   assert.strictEqual(response2.body.length, helpers.initialBlogs.length - 1)
-  // })
+  test('update a blog', async () => {
+    const response = await api.get('/api/blogs')
 
-  // test('update a blog', async () => {
-  //   const response = await api.get('/api/blogs')
-  //   const id = response.body[0].id
-  //   const blog = {
-  //     title: 'Nodejs 19',
-  //     author: 'RodriDev',
-  //     url: 'https://nodejs.org/en/',
-  //     likes: 150,
-  //   }
-  //   await api.put(`/api/blogs/${id}`).send(blog)
-  //   const response2 = await api.get('/api/blogs')
-  //   assert.strictEqual(response2.body[0].likes, 150)
-  // })
+    const id = response.body[0].id
+    const blog = {
+      title: 'Nodejs 20',
+      author: 'RodriDev',
+      url: 'https://nodejs.org/en/',
+      likes: 150,
+      userId: '664945dc28a7ef70c158dcc5',
+    }
+    await api.put(`/api/blogs/${id}`).send(blog)
+    const response2 = await api.get('/api/blogs')
+    assert.strictEqual(response2.body[0].likes, 150)
+  })
 })
 
 after(async () => {

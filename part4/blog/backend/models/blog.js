@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { MONGODB_URI } = require('../utils/config')
 
 const blogSchema = new mongoose.Schema({
   title: String,
