@@ -14,19 +14,25 @@ usersRouter.get('/', async (request, response) => {
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
+  console.log(username.length)
+  console.log(password.length)
 
-  const saltRounds = 10
-  const passwordHash = await bcrypt.hash(password, saltRounds)
+  if (password.length > 3 && username.length > 3) {
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash(password, saltRounds)
+    const user = new User({
+      username,
+      name,
+      passwordHash,
+    })
+    const savedUser = await user.save()
 
-  const user = new User({
-    username,
-    name,
-    passwordHash,
-  })
-
-  const savedUser = await user.save()
-
-  response.status(201).json(savedUser)
+    response.status(201).json(savedUser)
+  } else {
+    response.status(400).json({
+      error: 'username and password must be at least 3 characters long',
+    })
+  }
 })
 
 module.exports = usersRouter

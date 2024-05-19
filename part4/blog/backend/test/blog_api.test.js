@@ -57,7 +57,13 @@ describe('no reset', () => {
       likes: 52000,
       userId: '664945dc28a7ef70c158dcc5',
     }
-    await api.post('/api/blogs').send(newBlog)
+    await api
+      .post('/api/blogs')
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NDk2OGFkODY3OWY2ZTBmNmEzMmQ1NiIsImlhdCI6MTcxNjA4NzAwOCwiZXhwIjoxNzE2MTczNDA4fQ.k5QxbW3e9vO78ErndNyq1CNAC_0lFKmZyL4_PBcAqQo'
+      )
+      .send(newBlog)
     const blogs = await Blog.find({})
 
     assert.strictEqual(blogs.length, helpers.initialBlogs.length + 1)
@@ -70,7 +76,13 @@ describe('no reset', () => {
       url: 'https://www.typescriptlang.org',
       userId: '664945dc28a7ef70c158dcc5',
     }
-    const response = await api.post('/api/blogs').send(newBlog)
+    const response = await api
+      .post('/api/blogs')
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NDk2OGFkODY3OWY2ZTBmNmEzMmQ1NiIsImlhdCI6MTcxNjA4NzAwOCwiZXhwIjoxNzE2MTczNDA4fQ.k5QxbW3e9vO78ErndNyq1CNAC_0lFKmZyL4_PBcAqQo'
+      )
+      .send(newBlog)
     assert.strictEqual(response.body.likes, 0)
   })
 
@@ -80,7 +92,14 @@ describe('no reset', () => {
       author: 'RodriDev',
       userId: '664945dc28a7ef70c158dcc5',
     }
-    await api.post('/api/blogs').send(newBlog).expect(400)
+    await api
+      .post('/api/blogs')
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NDk2OGFkODY3OWY2ZTBmNmEzMmQ1NiIsImlhdCI6MTcxNjA4NzAwOCwiZXhwIjoxNzE2MTczNDA4fQ.k5QxbW3e9vO78ErndNyq1CNAC_0lFKmZyL4_PBcAqQo'
+      )
+      .send(newBlog)
+      .expect(400)
   })
 
   test('add a new blog without title', async () => {
@@ -89,7 +108,14 @@ describe('no reset', () => {
       url: 'https://www.typescriptlang.org',
       userId: '664945dc28a7ef70c158dcc5',
     }
-    await api.post('/api/blogs').send(newBlog).expect(400)
+    await api
+      .post('/api/blogs')
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NDk2OGFkODY3OWY2ZTBmNmEzMmQ1NiIsImlhdCI6MTcxNjA4NzAwOCwiZXhwIjoxNzE2MTczNDA4fQ.k5QxbW3e9vO78ErndNyq1CNAC_0lFKmZyL4_PBcAqQo'
+      )
+      .send(newBlog)
+      .expect(400)
   })
 
   test('delete a blog by id', async () => {

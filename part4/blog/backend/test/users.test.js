@@ -13,7 +13,7 @@ describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
-    const passwordHash = await bcrypt.hash('sekret', 10)
+    const passwordHash = await bcrypt.hash('albus', 10)
     const user = new User({ username: 'root', passwordHash })
 
     await user.save()
@@ -58,6 +58,56 @@ describe('when there is initially one user in db', () => {
 
     const usersAtEnd = await helpers.usersInDb()
     assert(result.body.error.includes('expected `username` to be unique'))
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('creation fails if username length is less than 3', async () => {
+    const usersAtStart = await helpers.usersInDb()
+
+    const newUser = {
+      username: 'ro',
+      name: 'Superuser',
+      password: 'salainen',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helpers.usersInDb()
+    assert(
+      result.body.error.includes(
+        'username and password must be at least 3 characters long'
+      )
+    )
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('creation fails if password length is less than 3', async () => {
+    const usersAtStart = await helpers.usersInDb()
+
+    const newUser = {
+      username: 'root',
+      name: 'Superuser',
+      password: 'sa',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helpers.usersInDb()
+    assert(
+      result.body.error.includes(
+        'username and password must be at least 3 characters long'
+      )
+    )
 
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
