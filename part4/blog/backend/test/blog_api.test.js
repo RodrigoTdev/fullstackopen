@@ -6,7 +6,6 @@ const app = require('../app.js')
 const Blog = require('../models/blog.js')
 const User = require('../models/user.js')
 const helpers = require('./test_helpers')
-const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const api = supertest(app)
@@ -56,6 +55,7 @@ describe('no reset', () => {
     { expiresIn: '24h' }
   )
   test('add a new blog', async () => {
+    const users = await User.find({})
     const newBlog = {
       title: 'Jest',
       author: 'RodriDev',
@@ -112,10 +112,55 @@ describe('no reset', () => {
   test('delete a blog by id', async () => {
     const response = await api.get('/api/blogs')
     const id = response.body[0].id
-    await api.delete(`/api/blogs/${id}`)
+    await api
+      .delete(`/api/blogs/${id}`)
+      .set('Authorization', `Bearer ${validToken}`)
     const response2 = await api.get('/api/blogs')
     assert.strictEqual(response2._body.length, helpers.initialBlogs.length + 1)
   })
+  test('delete a blog by id without token', async () => {
+    const response = await api.get('/api/blogs')
+    const id = response.body[0].id
+    const responseDelete = await api.delete(`/api/blogs/${id}`).expect(401)
+    // .set('Authorization', `Bearer ${validToken}`)
+    const response2 = await api.get('/api/blogs')
+    assert.strictEqual(responseDelete.body.error, 'Token missing or invalid')
+    assert.strictEqual(response2.body.length, helpers.initialBlogs.length + 1)
+  })
+  test('delete a blog by id with an invalid token', async () => {
+    const blogs = await api.get('/api/blogs')
+    const id = blogs.body[0].id
+    const responseDelete = await api
+      .delete(`/api/blogs/${id}`)
+      .expect(401)
+      .set('Authorization', `Bearer invalidToken`)
+    const blogsAfterDelete = await api.get('/api/blogs')
+    assert.strictEqual(responseDelete.body.error, 'token invalid')
+    assert.strictEqual(
+      blogsAfterDelete.body.length,
+      helpers.initialBlogs.length + 1
+    )
+  })
+  test('delete a blog by incorrect user', async () => {
+    const validToken2 = jwt.sign(
+      { username: 'root2', id: '664bb8b1cb8eed986e79c3fe' },
+      process.env.SECRET,
+      { expiresIn: '24h' }
+    )
+    const blogs = await api.get('/api/blogs')
+    const id = blogs.body[0].id
+    const responseDelete = await api
+      .delete(`/api/blogs/${id}`)
+      .expect(401)
+      .set('Authorization', `Bearer ${validToken2}`)
+    const blogsAfterDelete = await api.get('/api/blogs')
+    assert.strictEqual(responseDelete.body.error, 'unauthorized')
+    assert.strictEqual(
+      blogsAfterDelete.body.length,
+      helpers.initialBlogs.length + 1
+    )
+  })
+
   test('update a blog', async () => {
     const response = await api.get('/api/blogs')
     const id = response.body[0].id

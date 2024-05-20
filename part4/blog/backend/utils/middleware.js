@@ -1,5 +1,6 @@
 const logger = require('./logger')
 const helpers = require('./helpers')
+const jwt = require('jsonwebtoken')
 
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
@@ -39,12 +40,20 @@ const errorHandler = (error, request, response, next) => {
 }
 
 const authMiddleware = (req, res, next) => {
-  // if (process.env.NODE_ENV === 'test') {
-  //   req.token = process.env.TEST_AUTH_TOKEN
-  // } else {
-  //   req.token = helpers.tokenExtractor(req)
-  // }
   req.token = helpers.tokenExtractor(req)
+  next()
+}
+
+const userExtractor = async (request, response, next) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    const token = authorization.substring(7)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    request.user = decodedToken
+  } else {
+    return response.status(401).json({ error: 'Token missing or invalid' })
+  }
+
   next()
 }
 
@@ -53,4 +62,5 @@ module.exports = {
   unknownEndpoint,
   errorHandler,
   authMiddleware,
+  userExtractor,
 }

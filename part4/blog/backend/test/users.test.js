@@ -13,10 +13,14 @@ describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
-    const passwordHash = await bcrypt.hash('albus', 10)
-    const user = new User({ username: 'root', passwordHash })
+    const passwordHash = await bcrypt.hash('albus2', 10)
+    const user = new User({ username: 'root2', passwordHash })
 
     await user.save()
+    const passwordHash2 = await bcrypt.hash('albus2', 10)
+    const user2 = new User({ username: 'root2', passwordHash2 })
+
+    await user2.save()
   })
 
   test('creation succeeds with a fresh username', async () => {
