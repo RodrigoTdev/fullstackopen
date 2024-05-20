@@ -5,14 +5,14 @@ GET http://localhost:3001/api/blogs
 ### POST A NEW BLOG
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvZHJpZ28iLCJpZCI6IjY2NDkxMjQ4YTE1MDQ1YWU4Nzg3YmVlZCIsImlhdCI6MTcxNjA4NDE0OCwiZXhwIjoxNzE2MDg0MTU4fQ.SbOkX36fSBHTeFZYHA1h3ghp3iOsOmvC8leeeY0ZG1M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvZHJpZ28iLCJpZCI6IjY2NDkxMjQ4YTE1MDQ1YWU4Nzg3YmVlZCIsImlhdCI6MTcxNjE2ODY1NCwiZXhwIjoxNzE2MjU1MDU0fQ.u4WT50fE3--vX6IZuUgw-l2xr6nM1kmLUR0A8Z5lHpM
 
 {
-    "author": "Root",
-    "title": "JWT",
+    "author": "Root 7",
+    "title": "JWT 7",
     "url": "https://jwt.io",
     "likes": 18,
-    "userId": "664934037e8f752a040e822f"
+    "userId": "66491248a15045ae8787beed"
 }
 
 

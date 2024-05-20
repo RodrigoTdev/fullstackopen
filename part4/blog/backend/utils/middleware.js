@@ -1,4 +1,5 @@
 const logger = require('./logger')
+const helpers = require('./helpers')
 
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
@@ -37,8 +38,19 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
+const authMiddleware = (req, res, next) => {
+  // if (process.env.NODE_ENV === 'test') {
+  //   req.token = process.env.TEST_AUTH_TOKEN
+  // } else {
+  //   req.token = helpers.tokenExtractor(req)
+  // }
+  req.token = helpers.tokenExtractor(req)
+  next()
+}
+
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
+  authMiddleware,
 }

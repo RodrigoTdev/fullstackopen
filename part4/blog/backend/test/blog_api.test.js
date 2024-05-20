@@ -7,6 +7,7 @@ const Blog = require('../models/blog.js')
 const User = require('../models/user.js')
 const helpers = require('./test_helpers')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const api = supertest(app)
 
@@ -15,12 +16,12 @@ describe('blogs', () => {
     await Blog.deleteMany({})
     let blogObject = new Blog({
       ...helpers.initialBlogs[0],
-      user: '664945dc28a7ef70c158dcc5',
+      user: '664a7c1896a3a65fcfff47df',
     })
     await blogObject.save()
     blogObject = new Blog({
       ...helpers.initialBlogs[1],
-      user: '664945dc28a7ef70c158dcc5',
+      user: '664a7c1896a3a65fcfff47df',
     })
 
     await blogObject.save()
@@ -49,26 +50,28 @@ describe('blogs', () => {
 })
 
 describe('no reset', () => {
+  const validToken = jwt.sign(
+    { username: 'root', id: '664a7c1896a3a65fcfff47df' },
+    process.env.SECRET,
+    { expiresIn: '24h' }
+  )
   test('add a new blog', async () => {
     const newBlog = {
       title: 'Jest',
       author: 'RodriDev',
       url: 'https://jestjs.io',
       likes: 52000,
-      userId: '664945dc28a7ef70c158dcc5',
+      userId: '664a7c1896a3a65fcfff47df',
     }
+
     await api
       .post('/api/blogs')
-      .set(
-        'Authorization',
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NDk2OGFkODY3OWY2ZTBmNmEzMmQ1NiIsImlhdCI6MTcxNjA4NzAwOCwiZXhwIjoxNzE2MTczNDA4fQ.k5QxbW3e9vO78ErndNyq1CNAC_0lFKmZyL4_PBcAqQo'
-      )
+      .set('Authorization', `Bearer ${validToken}`)
       .send(newBlog)
-    const blogs = await Blog.find({})
 
+    const blogs = await Blog.find({})
     assert.strictEqual(blogs.length, helpers.initialBlogs.length + 1)
   })
-
   test('add a new blog without likes', async () => {
     const newBlog = {
       title: 'TypeScript',
@@ -78,14 +81,10 @@ describe('no reset', () => {
     }
     const response = await api
       .post('/api/blogs')
-      .set(
-        'Authorization',
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NDk2OGFkODY3OWY2ZTBmNmEzMmQ1NiIsImlhdCI6MTcxNjA4NzAwOCwiZXhwIjoxNzE2MTczNDA4fQ.k5QxbW3e9vO78ErndNyq1CNAC_0lFKmZyL4_PBcAqQo'
-      )
+      .set('Authorization', `Bearer ${validToken}`)
       .send(newBlog)
     assert.strictEqual(response.body.likes, 0)
   })
-
   test('add a new blog without url', async () => {
     const newBlog = {
       title: 'TypeScript',
@@ -94,14 +93,10 @@ describe('no reset', () => {
     }
     await api
       .post('/api/blogs')
-      .set(
-        'Authorization',
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NDk2OGFkODY3OWY2ZTBmNmEzMmQ1NiIsImlhdCI6MTcxNjA4NzAwOCwiZXhwIjoxNzE2MTczNDA4fQ.k5QxbW3e9vO78ErndNyq1CNAC_0lFKmZyL4_PBcAqQo'
-      )
+      .set('Authorization', `Bearer ${validToken}`)
       .send(newBlog)
       .expect(400)
   })
-
   test('add a new blog without title', async () => {
     const newBlog = {
       author: 'RodriDev',
@@ -110,26 +105,19 @@ describe('no reset', () => {
     }
     await api
       .post('/api/blogs')
-      .set(
-        'Authorization',
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NDk2OGFkODY3OWY2ZTBmNmEzMmQ1NiIsImlhdCI6MTcxNjA4NzAwOCwiZXhwIjoxNzE2MTczNDA4fQ.k5QxbW3e9vO78ErndNyq1CNAC_0lFKmZyL4_PBcAqQo'
-      )
+      .set('Authorization', `Bearer ${validToken}`)
       .send(newBlog)
       .expect(400)
   })
-
   test('delete a blog by id', async () => {
     const response = await api.get('/api/blogs')
     const id = response.body[0].id
-
     await api.delete(`/api/blogs/${id}`)
     const response2 = await api.get('/api/blogs')
     assert.strictEqual(response2._body.length, helpers.initialBlogs.length + 1)
   })
-
   test('update a blog', async () => {
     const response = await api.get('/api/blogs')
-
     const id = response.body[0].id
     const blog = {
       title: 'Nodejs 20',
