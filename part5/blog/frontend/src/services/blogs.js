@@ -3,7 +3,11 @@ const baseUrl = '/api/blogs'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+  return request.then((response) => response.data)
 }
 
-export default { getAll }
+const setToken = (token) => {
+  axios.defaults.headers.common['Authorization'] = token
+}
+
+export default { getAll, setToken }

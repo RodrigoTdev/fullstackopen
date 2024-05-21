@@ -11,6 +11,16 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      console.log(user, 'user')
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   return (
     <div className='app'>
       {!user && <Login setUser={setUser} />}

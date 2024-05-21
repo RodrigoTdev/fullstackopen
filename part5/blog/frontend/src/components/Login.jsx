@@ -11,6 +11,11 @@ export const Login = ({ setUser }) => {
       })
       .then((response) => {
         setUser(response.data)
+        console.log(response.data, 'response.data')
+        window.localStorage.setItem(
+          'loggedBlogappUser',
+          JSON.stringify(response.data)
+        )
       })
   }
   return (
