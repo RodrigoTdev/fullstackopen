@@ -1,0 +1,74 @@
+/* Styles */
+body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Login styles */
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid gray;
+  width: 300px;
+  height: 200px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 2px;
+}
+
+#login-button {
+  margin: 10px 0;
+  width: 100px;
+  height: 30px;
+}
+
+/* Blog styles */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.blogs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 5px;
+}
+
+.blog-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid gray;
+  width: 80%;
+  padding: 5px;
+}
+
+.blog-container h2,
+.blog-container h4,
+.blog-container p {
+  margin: 5px 5px;
+}
