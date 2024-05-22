@@ -1,7 +1,10 @@
-import React from 'react'
 import axios from 'axios'
 
-export const AddBlogForm = ({ setAddBlog, setAddBlogNotification }) => {
+export const AddBlogForm = ({
+  setAddBlog,
+  setAddBlogNotification,
+  setAddNewBlog,
+}) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const localStorage = window.localStorage.getItem('loggedBlogappUser')
@@ -20,7 +23,7 @@ export const AddBlogForm = ({ setAddBlog, setAddBlogNotification }) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      // .then(() => window.location.reload())
+      .then((response) => setAddNewBlog(response.data))
       .then(
         () =>
           setAddBlogNotification({
@@ -28,7 +31,7 @@ export const AddBlogForm = ({ setAddBlog, setAddBlogNotification }) => {
             message: `a new blog ${blog.title} by ${blog.author} added`,
           }),
         setTimeout(() => {
-          window.location.reload()
+          setAddBlogNotification(null)
         }, 3000)
       )
   }

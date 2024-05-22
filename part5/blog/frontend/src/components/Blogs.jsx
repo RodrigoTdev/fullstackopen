@@ -1,15 +1,28 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Blog from './Blog'
+import blogService from '../services/blogs'
 import { AddBlogForm } from './AddBlogForm'
 import { Notification } from './Notification'
 
-export const Blogs = ({ blogs, name }) => {
+export const Blogs = ({ name }) => {
+  const [blogs, setBlogs] = useState([])
   const [addBlog, setAddBlog] = useState(false)
   const [addBlogNotification, setAddBlogNotification] = useState(false)
+  const [addNewBlog, setAddNewBlog] = useState({})
+
+  useEffect(() => {
+    blogService
+      .getAll()
+      .then((blogs) =>
+        setBlogs(blogs.filter((blog) => blog.user.name === name))
+      )
+  }, [addNewBlog, name])
+
   const handleClickLogOut = () => {
     window.localStorage.clear()
     window.location.reload()
   }
+
   return (
     <div className='blogs'>
       <div className='header'>
@@ -51,6 +64,7 @@ export const Blogs = ({ blogs, name }) => {
         <AddBlogForm
           setAddBlog={setAddBlog}
           setAddBlogNotification={setAddBlogNotification}
+          setAddNewBlog={setAddNewBlog}
         />
       )}
     </div>
