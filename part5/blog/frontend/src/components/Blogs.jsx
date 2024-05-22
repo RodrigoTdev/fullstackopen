@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import Blog from './Blog'
 import { AddBlogForm } from './AddBlogForm'
+import { Notification } from './Notification'
 
 export const Blogs = ({ blogs, name }) => {
   const [addBlog, setAddBlog] = useState(false)
+  const [addBlogNotification, setAddBlogNotification] = useState(false)
   const handleClickLogOut = () => {
     window.localStorage.clear()
     window.location.reload()
@@ -28,6 +30,13 @@ export const Blogs = ({ blogs, name }) => {
           Logout
         </button>
       </div>
+
+      {addBlogNotification && (
+        <Notification
+          loginError={addBlogNotification}
+          setAddBlogNotification={setAddBlogNotification}
+        />
+      )}
       <h1>BLOGS</h1>
 
       {!addBlog &&
@@ -38,7 +47,12 @@ export const Blogs = ({ blogs, name }) => {
           />
         ))}
 
-      {addBlog && <AddBlogForm setAddBlog={setAddBlog} />}
+      {addBlog && (
+        <AddBlogForm
+          setAddBlog={setAddBlog}
+          setAddBlogNotification={setAddBlogNotification}
+        />
+      )}
     </div>
   )
 }

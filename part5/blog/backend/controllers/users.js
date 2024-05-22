@@ -14,8 +14,6 @@ usersRouter.get('/', async (request, response) => {
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
-  console.log(username.length)
-  console.log(password.length)
 
   if (password.length > 3 && username.length > 3) {
     const saltRounds = 10

@@ -5,10 +5,10 @@ GET http://localhost:3001/api/blogs
 ### POST A NEW BLOG
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NGJmYzg2ODVmYzRiNjNhOGM5OWRkNyIsImlhdCI6MTcxNjI1NTkwMCwiZXhwIjoxNzE2MzQyMzAwfQ.M6zW9jLeOZtPdW4-FRCL682tHSrJGs-uon5WupV296A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NGJmYzg2ODVmYzRiNjNhOGM5OWRkNyIsImlhdCI6MTcxNjMzNzQyOCwiZXhwIjoxNzE2NDIzODI4fQ._4X4v5WCxYgM-UthzsayVmhFuW9MjOgObvEvcAKpZ9Q
 
 {
-    "author": "Root New",
+    "author": "Root New 5",
     "title": "JWT",
     "url": "https://jwt.io",
     "likes": 18,
@@ -17,8 +17,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
 
 
 ### DELETE A BLOG
-DELETE http://localhost:3001/api/blogs/664bd342aca87c3a989b7581
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvZHJpZ28iLCJpZCI6IjY2NDkxMjQ4YTE1MDQ1YWU4Nzg3YmVlZCIsImlhdCI6MTcxNjI0NTA2MSwiZXhwIjoxNzE2MzMxNDYxfQ.u-Grwxt7-Ex9hUOZn0A8ZphPKpgxjhHDN7tZnk7TkrY
+DELETE http://localhost:3001/api/blogs/664d45965ad57c56f12fed0a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NGJmYzg2ODVmYzRiNjNhOGM5OWRkNyIsImlhdCI6MTcxNjM0MDMzMSwiZXhwIjoxNzE2NDI2NzMxfQ.KuCKgmV-3cCUGcsLrZEamXWDcoIiuhEF5WVAoILZyf0
 
 
 ### CHANGE A BLOG

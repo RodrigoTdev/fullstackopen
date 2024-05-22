@@ -1,7 +1,9 @@
 import axios from 'axios'
-import React from 'react'
+import React, { useState } from 'react'
+import { Notification } from './Notification'
 
 export const Login = ({ setUser }) => {
+  const [loginError, setLoginError] = useState(null)
   const handleSubmit = (e) => {
     e.preventDefault()
     axios
@@ -11,15 +13,21 @@ export const Login = ({ setUser }) => {
       })
       .then((response) => {
         setUser(response.data)
-        console.log(response.data, 'response.data')
         window.localStorage.setItem(
           'loggedBlogappUser',
           JSON.stringify(response.data)
         )
       })
+      .catch(() => {
+        setLoginError({ type: 'error', message: 'wrong username or password' })
+        setTimeout(() => {
+          setLoginError(null)
+        }, 3000)
+      })
   }
   return (
     <div className='login'>
+      {loginError && <Notification loginError={loginError} />}
       <h2>Log in to the application</h2>
       <form
         className='login-form'
@@ -30,14 +38,12 @@ export const Login = ({ setUser }) => {
           type='text'
           placeholder='username'
           id='username-input'
-          defaultValue='rodrigo'
         />
         <label htmlFor='password-input'>Password</label>
         <input
           type='password'
           placeholder='password'
           id='password-input'
-          defaultValue='1988'
         />
         <input
           type='submit'

@@ -1,15 +1,36 @@
 import React from 'react'
+import axios from 'axios'
 
-export const AddBlogForm = ({ setAddBlog }) => {
+export const AddBlogForm = ({ setAddBlog, setAddBlogNotification }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
+    const localStorage = window.localStorage.getItem('loggedBlogappUser')
+    const token = JSON.parse(localStorage).token
     const blog = {
       title: e.target.title.value,
       author: e.target.author.value,
       url: e.target.url.value,
+      likes: 0,
+      userId: JSON.parse(localStorage).userId,
     }
-    console.log(blog)
     setAddBlog(false)
+    axios
+      .post('/api/blogs', blog, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      // .then(() => window.location.reload())
+      .then(
+        () =>
+          setAddBlogNotification({
+            type: 'success',
+            message: `a new blog ${blog.title} by ${blog.author} added`,
+          }),
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
+      )
   }
   return (
     <form
