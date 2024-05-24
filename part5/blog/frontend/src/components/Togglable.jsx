@@ -17,7 +17,7 @@ export const Togglable = forwardRef((props, refs) => {
   })
 
   return (
-    <div>
+    <div style={{ marginLeft: '5px' }}>
       <div style={hideWhenVisible}>
         <button onClick={toggleVisibility}>{props.buttonLabel}</button>
       </div>
@@ -28,3 +28,5 @@ export const Togglable = forwardRef((props, refs) => {
     </div>
   )
 })
+
+Togglable.displayName = 'Togglable'

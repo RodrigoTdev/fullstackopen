@@ -15,7 +15,11 @@ export const Blogs = ({ name }) => {
     blogService
       .getAll()
       .then((blogs) =>
-        setBlogs(blogs.filter((blog) => blog.user.name === name))
+        setBlogs(
+          blogs
+            .filter((blog) => blog.user.name === name)
+            .sort((a, b) => b.likes - a.likes)
+        )
       )
   }, [addNewBlog, name, likedBy])
 

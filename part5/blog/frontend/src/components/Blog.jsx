@@ -2,9 +2,9 @@ import axios from 'axios'
 import { Togglable } from './Togglable'
 import { useState } from 'react'
 
-const Blog = ({ blog, addLike, setChildLikedBy }) => {
+const Blog = ({ blog, setChildLikedBy }) => {
   const [likedBy, setLikedBy] = useState(null)
-  const handleClick = () => {
+  const handleClickLike = () => {
     const user = JSON.parse(localStorage.getItem('loggedBlogappUser'))
     const newBlog = {
       title: blog.title,
@@ -18,6 +18,18 @@ const Blog = ({ blog, addLike, setChildLikedBy }) => {
       setChildLikedBy((prev) => prev + 1)
     )
   }
+  const handleDeleteBlog = (id) => {
+    const user = JSON.parse(localStorage.getItem('loggedBlogappUser'))
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      axios
+        .delete(`/api/blogs/${id}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then(() => setChildLikedBy((prev) => prev + 1))
+    }
+  }
   return (
     <div className='blog-container'>
       <h2>Title: {blog.title}</h2>
@@ -29,7 +41,7 @@ const Blog = ({ blog, addLike, setChildLikedBy }) => {
           <br />
           Likes: {blog.likes}
           <button
-            onClick={() => handleClick()}
+            onClick={() => handleClickLike()}
             style={{
               marginLeft: '10px',
               cursor: 'pointer',
@@ -47,6 +59,20 @@ const Blog = ({ blog, addLike, setChildLikedBy }) => {
               Liked by <b>{likedBy}</b>
             </span>
           )}
+          <button
+            onClick={() => handleDeleteBlog(blog.id)}
+            style={{
+              cursor: 'pointer',
+              backgroundColor: 'red',
+              color: 'white',
+              borderRadius: '5px',
+              border: 'none',
+              width: '50px',
+              margin: '10px 0 5px 5px',
+            }}
+          >
+            Delete
+          </button>
         </p>
       </Togglable>
     </div>

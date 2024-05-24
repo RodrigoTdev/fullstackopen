@@ -17,8 +17,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
 
 
 ### DELETE A BLOG
-DELETE http://localhost:3001/api/blogs/664e56bee778f48fe59cff63
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NGJmYzg2ODVmYzRiNjNhOGM5OWRkNyIsImlhdCI6MTcxNjQxNzIzNCwiZXhwIjoxNzE2NTAzNjM0fQ.Bb8YVSEuLN2PUMCjgq9TCyxueBseMdbcA20NMo5Tv5E
+DELETE http://localhost:3001/api/blogs/664e743ce778f48fe59cffcc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2NGJmYzg2ODVmYzRiNjNhOGM5OWRkNyIsImlhdCI6MTcxNjQxODEyMiwiZXhwIjoxNzE2NTA0NTIyfQ.0-arhejrp3WTa44sukTqtm1FapaKpSB2tYjiyQcvIOM
 
 
 ### CHANGE A BLOG
