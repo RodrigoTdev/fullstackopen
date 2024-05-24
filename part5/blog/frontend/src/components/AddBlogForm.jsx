@@ -1,14 +1,14 @@
 import axios from 'axios'
 
 export const AddBlogForm = ({
-  setAddBlog,
   setAddBlogNotification,
   setAddNewBlog,
+  blogFormRef,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
+    blogFormRef.current.toggleVisibility()
     const localStorage = window.localStorage.getItem('loggedBlogappUser')
-    const token = JSON.parse(localStorage).token
     const blog = {
       title: e.target.title.value,
       author: e.target.author.value,
@@ -16,20 +16,18 @@ export const AddBlogForm = ({
       likes: 0,
       userId: JSON.parse(localStorage).userId,
     }
-    setAddBlog(false)
     axios
       .post('/api/blogs', blog, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${JSON.parse(localStorage).token}`,
         },
       })
-      .then((response) => setAddNewBlog(response.data))
       .then(
-        () =>
-          setAddBlogNotification({
-            type: 'success',
-            message: `a new blog ${blog.title} by ${blog.author} added`,
-          }),
+        (response) => setAddNewBlog(response.data),
+        setAddBlogNotification({
+          type: 'success',
+          message: `a new blog ${blog.title} - by ${blog.author} added`,
+        }),
         setTimeout(() => {
           setAddBlogNotification(null)
         }, 3000)
