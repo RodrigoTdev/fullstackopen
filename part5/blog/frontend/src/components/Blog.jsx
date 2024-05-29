@@ -32,14 +32,14 @@ const Blog = ({ blog, setChildLikedBy }) => {
   }
   return (
     <div className='blog-container'>
-      <h2>Title: {blog.title}</h2>
+      <h2 className='title'>Title: {blog.title}</h2>
+      <p>
+        Author: <span className='author'>{blog.author}</span>
+      </p>
       <Togglable buttonLabel='View Details'>
         <p>
-          Author: {blog.author}
-          <br />
-          Url: {blog.url}
-          <br />
-          Likes: {blog.likes}
+          <p className='url'>Url: {blog.url}</p>
+          <p className='likes'>Likes: {blog.likes}</p>
           <button
             onClick={() => handleClickLike()}
             style={{
