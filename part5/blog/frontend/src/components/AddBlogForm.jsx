@@ -4,35 +4,36 @@ export const AddBlogForm = ({
   setAddBlogNotification,
   setAddNewBlog,
   blogFormRef,
+  handleSubmit,
 }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    blogFormRef.current.toggleVisibility()
-    const localStorage = window.localStorage.getItem('loggedBlogappUser')
-    const blog = {
-      title: e.target.title.value,
-      author: e.target.author.value,
-      url: e.target.url.value,
-      likes: 0,
-      userId: JSON.parse(localStorage).userId,
-    }
-    axios
-      .post('/api/blogs', blog, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage).token}`,
-        },
-      })
-      .then(
-        (response) => setAddNewBlog(response.data),
-        setAddBlogNotification({
-          type: 'success',
-          message: `a new blog ${blog.title} - by ${blog.author} added`,
-        }),
-        setTimeout(() => {
-          setAddBlogNotification(null)
-        }, 3000)
-      )
-  }
+  // const handleSubmit = (e) => {
+  //   e.preventDefault()
+  //   blogFormRef.current.toggleVisibility()
+  //   const localStorage = window.localStorage.getItem('loggedBlogappUser')
+  //   const blog = {
+  //     title: e.target.title.value,
+  //     author: e.target.author.value,
+  //     url: e.target.url.value,
+  //     likes: 0,
+  //     userId: JSON.parse(localStorage).userId,
+  //   }
+  //   axios
+  //     .post('/api/blogs', blog, {
+  //       headers: {
+  //         Authorization: `Bearer ${JSON.parse(localStorage).token}`,
+  //       },
+  //     })
+  //     .then(
+  //       (response) => setAddNewBlog(response.data),
+  //       setAddBlogNotification({
+  //         type: 'success',
+  //         message: `a new blog ${blog.title} - by ${blog.author} added`,
+  //       }),
+  //       setTimeout(() => {
+  //         setAddBlogNotification(null)
+  //       }, 3000)
+  //     )
+  // }
   return (
     <form
       className='add-blog-form'
@@ -63,6 +64,7 @@ export const AddBlogForm = ({
       <input
         type='submit'
         value='Create'
+        className='submit-button'
       />
     </form>
   )

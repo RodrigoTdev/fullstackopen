@@ -11,10 +11,10 @@ const Blog = ({ blog, setChildLikedBy }) => {
       author: blog.author,
       url: blog.url,
       likes: blog.likes + 1,
-      userid: user.userId,
+      userid: user?.userId,
     }
     axios.put(`/api/blogs/${blog.id}`, newBlog).then(
-      () => setLikedBy(user.name),
+      () => setLikedBy(user?.name),
       setChildLikedBy((prev) => prev + 1)
     )
   }
@@ -41,6 +41,7 @@ const Blog = ({ blog, setChildLikedBy }) => {
           <p className='url'>Url: {blog.url}</p>
           <p className='likes'>Likes: {blog.likes}</p>
           <button
+            className='like-button'
             onClick={() => handleClickLike()}
             style={{
               marginLeft: '10px',
