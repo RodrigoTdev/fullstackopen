@@ -1,51 +1,58 @@
-import axios from 'axios'
+import blogService from '../services/blogs'
 
 export const AddBlogForm = ({
   setAddBlogNotification,
   setAddNewBlog,
   blogFormRef,
-  handleSubmit,
 }) => {
-  // const handleSubmit = (e) => {
-  //   e.preventDefault()
-  //   blogFormRef.current.toggleVisibility()
-  //   const localStorage = window.localStorage.getItem('loggedBlogappUser')
-  //   const blog = {
-  //     title: e.target.title.value,
-  //     author: e.target.author.value,
-  //     url: e.target.url.value,
-  //     likes: 0,
-  //     userId: JSON.parse(localStorage).userId,
-  //   }
-  //   axios
-  //     .post('/api/blogs', blog, {
-  //       headers: {
-  //         Authorization: `Bearer ${JSON.parse(localStorage).token}`,
-  //       },
-  //     })
-  //     .then(
-  //       (response) => setAddNewBlog(response.data),
-  //       setAddBlogNotification({
-  //         type: 'success',
-  //         message: `a new blog ${blog.title} - by ${blog.author} added`,
-  //       }),
-  //       setTimeout(() => {
-  //         setAddBlogNotification(null)
-  //       }, 3000)
-  //     )
-  // }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    blogFormRef.current.toggleVisibility()
+
+    const { title, author, url } = e.target
+
+    const userId = JSON.parse(
+      window.localStorage.getItem('loggedBlogappUser')
+    ).userId
+
+    const blog = {
+      title: title.value,
+      author: author.value,
+      url: url.value,
+      likes: 0,
+      userId,
+    }
+
+    try {
+      const response = await blogService.create(blog)
+
+      await setAddNewBlog(response.data)
+      await setAddBlogNotification({
+        type: 'success',
+        message: `New blog ${blog.title} - by ${blog.author} added`,
+      })
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setTimeout(() => {
+        setAddBlogNotification(null)
+      }, 3000)
+    }
+  }
+
   return (
     <form
       className='add-blog-form'
       onSubmit={(e) => handleSubmit(e)}
     >
-      <h2>Create New Blog</h2>
+      <h2 style={{ margin: '10px 0 5px 0' }}>Create New Blog</h2>
       <label>Title:</label>
       <input
         type='text'
         name='title'
         id='title'
         placeholder='Title'
+        defaultValue='Test 15'
       />
       <label>Author:</label>
       <input
@@ -53,6 +60,7 @@ export const AddBlogForm = ({
         name='author'
         id='author'
         placeholder='Author'
+        defaultValue='Root'
       />
       <label>Url:</label>
       <input
@@ -60,11 +68,20 @@ export const AddBlogForm = ({
         name='url'
         id='url'
         placeholder='Url'
+        defaultValue='https://www.test15.com/'
       />
       <input
         type='submit'
         value='Create'
         className='submit-button'
+        style={{
+          backgroundColor: 'forestgreen',
+          color: 'white',
+          fontWeight: 'bold',
+          border: 'none',
+          borderRadius: '5px',
+          width: '70px',
+        }}
       />
     </form>
   )

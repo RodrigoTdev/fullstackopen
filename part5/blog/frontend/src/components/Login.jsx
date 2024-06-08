@@ -1,29 +1,25 @@
-import axios from 'axios'
 import { useState } from 'react'
 import { Notification } from './Notification'
+import blogService from '../services/blogs'
 
 export const Login = ({ setUser }) => {
   const [loginError, setLoginError] = useState(null)
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    axios
-      .post('/api/login', {
-        username: e.target[0].value,
-        password: e.target[1].value,
-      })
-      .then((response) => {
-        setUser(response.data)
-        window.localStorage.setItem(
-          'loggedBlogappUser',
-          JSON.stringify(response.data)
-        )
-      })
-      .catch(() => {
-        setLoginError({ type: 'error', message: 'wrong username or password' })
-        setTimeout(() => {
-          setLoginError(null)
-        }, 3000)
-      })
+    const credentials = {
+      username: e.target[0].value,
+      password: e.target[1].value,
+    }
+    try {
+      const response = await blogService.login(credentials)
+      setUser(response)
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(response))
+    } catch (error) {
+      setLoginError({ type: 'error', message: 'wrong username or password' })
+      setTimeout(() => {
+        setLoginError(null)
+      }, 3000)
+    }
   }
   return (
     <div className='login'>

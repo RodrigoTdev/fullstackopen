@@ -6,11 +6,12 @@ const Blog = ({ blog, setChildLikedBy }) => {
   const [likedBy, setLikedBy] = useState(null)
   const handleClickLike = () => {
     const user = JSON.parse(localStorage.getItem('loggedBlogappUser'))
+    const { title, author, url, likes } = blog
     const newBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
+      title: title,
+      author: author,
+      url: url,
+      likes: likes + 1,
       userid: user?.userId,
     }
     axios.put(`/api/blogs/${blog.id}`, newBlog).then(
@@ -37,24 +38,30 @@ const Blog = ({ blog, setChildLikedBy }) => {
         Author: <span className='author'>{blog.author}</span>
       </p>
       <Togglable buttonLabel='View Details'>
-        <p>
-          <p className='url'>Url: {blog.url}</p>
-          <p className='likes'>Likes: {blog.likes}</p>
+        <p
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: '-4px',
+          }}
+        >
+          <span className='url'>Url: {blog.url}</span>
+          <span className='likes'>Likes: {blog.likes}</span>
           <button
             className='like-button'
             onClick={() => handleClickLike()}
             style={{
-              marginLeft: '10px',
               cursor: 'pointer',
               backgroundColor: 'green',
               color: 'white',
               borderRadius: '5px',
               border: 'none',
+              width: '50px',
+              marginBottom: '5px',
             }}
           >
             like
           </button>
-          <br />
           {likedBy && (
             <span style={{ color: 'green' }}>
               Liked by <b>{likedBy}</b>
@@ -69,7 +76,7 @@ const Blog = ({ blog, setChildLikedBy }) => {
               borderRadius: '5px',
               border: 'none',
               width: '50px',
-              margin: '10px 0 5px 5px',
+              marginBottom: '5px',
             }}
           >
             Delete
